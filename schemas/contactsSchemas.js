@@ -10,4 +10,4 @@ export const updateContactSchema = Joi.object({
     name: Joi.string(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ukr'] } }),
     phone: Joi.string(),
-}).min(1);
+}).min(1).messages({'any.required': "Body must have at least one field"});
