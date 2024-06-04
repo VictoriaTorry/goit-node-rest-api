@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const contactSchema = new Schema(
     {
@@ -17,8 +17,8 @@ const contactSchema = new Schema(
           default: false,
         },
       }
-)
+);
 
-const Contact = model("contact", contactSchema);
+const Contact = model('contact', contactSchema);
 
 export default Contact;
