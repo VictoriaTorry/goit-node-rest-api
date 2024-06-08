@@ -29,6 +29,8 @@ contactSchema.post('findOneAndUpdate', handleSaveError);
 
 export const Contact = model('contact', contactSchema);
 
+export default Contact;
+
 
 export const createContactSchema = Joi.object({
     name: Joi.string().required(),
@@ -50,4 +52,3 @@ export const updateFavoriteSchema = Joi.object({
 
 
 
-export default Contact;
