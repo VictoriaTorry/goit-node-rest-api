@@ -47,7 +47,7 @@ export const userRegisterSchema = Joi.object({
       emailRegexp,
       "match the input format. Example of input: ivanov@gmail.com"
     ),
-  subscription: Joi.string().required().valid("starter", "pro", "business"),
+  subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
 export const userLoginSchema = Joi.object({
