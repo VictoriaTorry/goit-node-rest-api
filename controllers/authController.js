@@ -1,9 +1,15 @@
 import HttpError from "../helpers/HttpError.js";
-import User from "../models/user.js";
+import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import fs from 'fs/promises';
+import Jimp from 'jimp';
+import path from 'path';
+import gravatar from 'gravatar';
 
 const { JWT_SECRET } = process.env;
+
+const avatarsPath = path.resolve('public', 'avatars');
 
 export const register = async (req, res, next) => {
   try {
@@ -13,9 +19,11 @@ export const register = async (req, res, next) => {
       throw HttpError(409, "Email already in use");
     }
 
+    const avatarURL = gravatar.url(email);
+
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
     res.status(201).json({
       user: {
@@ -96,4 +104,22 @@ export const updateUserSubscription = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+export const updateAvatar = async (req, res) => {
+
+  const { _id } = req.user;
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsPath, filename);
+
+  Jimp.read(oldPath, (err, img) => {
+    if (err) throw err;
+    img.resize(250, 250).write(newPath);
+  });
+
+  await fs.rename(oldPath, newPath);
+  const avatarURL = path.join('avatars', filename);
+
+  await User.findOneAndUpdate(_id, {avatarURL});
+  return res.status(200).json({ avatarURL });
 };

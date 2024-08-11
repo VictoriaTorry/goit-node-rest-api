@@ -5,14 +5,16 @@ import {
   login,
   logout,
   register,
+  updateAvatar,
   updateUserSubscription,
 } from "../controllers/authController.js";
 import {
   userRegisterSchema,
   userLoginSchema,
   updateSubscriptionSchema,
-} from "../models/user.js";
+} from "../models/User.js";
 import { authenticate } from "../midlewares/authenticate.js";
+import { upload } from "../midlewares/upload.js";
 
 const authRouter = express.Router();
 
@@ -23,6 +25,14 @@ authRouter.post("/login", validateBody(userLoginSchema), login);
 authRouter.get("/current", authenticate, getCurrent);
 
 authRouter.post("/logout", authenticate, logout);
+
+authRouter.patch(
+  '/avatars',
+  authenticate,
+  upload.single('avatar'),
+  // upload.array('avatars', 8) --- 8 це максимальна кількість файлів
+  updateAvatar
+)
 
 authRouter.patch(
   "/:id",

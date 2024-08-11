@@ -23,8 +23,10 @@ const userSchema = new Schema(
     },
     token: {
       type: String,
-      default: null,
     },
+    avatarURL: {
+      type: String,
+    }
   },
   { versionKey: false, timestamps: true }
 );
@@ -47,7 +49,7 @@ export const userRegisterSchema = Joi.object({
       emailRegexp,
       "match the input format. Example of input: ivanov@gmail.com"
     ),
-  subscription: Joi.string().valid("starter", "pro", "business"),
+  subscription: Joi.string().valid("starter", "pro", "business")
 });
 
 export const userLoginSchema = Joi.object({
