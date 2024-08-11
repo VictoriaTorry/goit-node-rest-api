@@ -10,7 +10,7 @@ import contactsRouter from "./routes/contactsRouter.js";
 
 const { PORT = 3000, DB_HOST } = process.env;
 
-const app = express();
+export const app = express();
 
 app.use(morgan("tiny"));
 app.use(cors());
