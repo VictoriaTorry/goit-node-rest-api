@@ -106,11 +106,14 @@ export const updateUserSubscription = async (req, res, next) => {
   }
 };
 
-export const updateAvatar = async (req, res) => {
-
-  const { _id } = req.user;
-  const { path: oldPath, filename } = req.file;
-  const newPath = path.join(avatarsPath, filename);
+export const updateAvatar = async (req, res, next) => {
+  try {
+    if(!req.file) {
+      throw HttpError(404, "You did not add the photo for avatar");
+    }
+    const { _id } = req.user;
+    const { path: oldPath, filename } = req.file;
+    const newPath = path.join(avatarsPath, filename);
 
   Jimp.read(oldPath, (err, img) => {
     if (err) throw err;
@@ -118,8 +121,11 @@ export const updateAvatar = async (req, res) => {
   });
 
   await fs.rename(oldPath, newPath);
-  const avatarURL = path.join('avatars', filename);
+    const avatarURL = path.join('avatars', filename);
 
   await User.findOneAndUpdate(_id, {avatarURL});
   return res.status(200).json({ avatarURL });
+  } catch (error) {
+    next(error);
+  }
 };
