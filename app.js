@@ -7,7 +7,6 @@ import "dotenv/config";
 import authRouter from "./routes/authRoute.js";
 import contactsRouter from "./routes/contactsRouter.js";
 
-
 const { PORT = 3000, DB_HOST } = process.env;
 
 export const app = express();
@@ -15,7 +14,7 @@ export const app = express();
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 app.use("/users", authRouter);
 app.use("/api/contacts", contactsRouter);
